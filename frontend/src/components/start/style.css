@@ -1,0 +1,10 @@
+.start-container {
+  position: relative;
+  display: flex;
+  width: 27vw;
+  flex-direction: column;
+  justify-content: center;
+  height: fit-content;
+  align-items: center;
+  align-content: center;
+}
