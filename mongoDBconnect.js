@@ -1,112 +1,115 @@
-/* MODULES */
 const mongoose = require('mongoose');
 
-/* CUSTOMER PRICELISTS ALREADY CREATED */
-/* SCHEMA */
-const customerPricesSchema = new mongoose.Schema(
-  {},
-  { strict: false, _id: false, versionKey: false }
+// Update  Date
+const updateDateSchema = new mongoose.Schema(
+  {
+    _id: String,
+    date: Date,
+  },
+  { _id: false, versionKey: false }
 );
-/* MODEL */
-const customerPricesModel = mongoose.model('Customer_Prices', customerPricesSchema);
-exports.customerPricesModel = customerPricesModel;
+const updateDateModel = mongoose.model('UpdateDate', updateDateSchema);
 
-/* CUSTOMER NAME: CUSTOMER NUMBER */
-/* SCHEMA */
-const customerNumberNameSchema = new mongoose.Schema(
-  {},
-  { strict: false, _id: false, versionKey: false }
-);
-/* MODEL */
-const customerNumberNameModel = mongoose.model(
-  'Customer_Number_Name',
-  customerNumberNameSchema
-);
-exports.customerNumberNameModel = customerNumberNameModel;
+// Results Object
+const resultsSchema = new mongoose.Schema({
+  data: mongoose.Schema.Types.Mixed,
+});
+const resultsModel = mongoose.model('Results', resultsSchema);
 
-/* CUSTOMER NUMBER: PRICELIST NUMBER */
-/* SCHEMA */
-const customerPricelistNumberSchema = new mongoose.Schema(
-  {},
-  { strict: false, _id: false, versionKey: false }
+// Search Results
+const searchValuesSchema = new mongoose.Schema(
+  {
+    _id: String,
+    search: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Results',
+    },
+  },
+  { _id: false, versionKey: false }
 );
-/* MODEL */
-const customerPricelistNumberModel = mongoose.model(
-  'Customer_Pricelist_Number',
-  customerPricelistNumberSchema
-);
-exports.customerPricelistNumberModel = customerPricelistNumberModel;
+const searchValuesModel = mongoose.model('Search_Values', searchValuesSchema);
 
-// QUERY ALL CUSTOMER PRICE-LIST NUMBERS
-exports.queryAllPriceListNumbers = async function (notifyMain) {
+// Mongoose Methods
+exports.queryAllSearchKeys = async function () {
   try {
-    let result = await customerPricesModel.find().distinct('_id').exec();
-    return result;
+    let response = await searchValuesModel.find().distinct('_id').exec();
+    return response;
   } catch (err) {
-    logFileFunc(err.stack);
-    notifyMain({
-      title: 'Query all price list numbers failed',
-      body: 'Problem querying all price list numbers, please check the log file.',
-    });
+    console.error(err);
   }
 };
 
-// QUERY A SINGLE PRICE-LIST
-exports.querySinglePriceList = async function (customerNumber, notifyMain) {
+exports.queryKeyExists = async function (searchValue) {
   try {
-    let priceList = await customerPricesModel.findById(customerNumber).lean().exec();
-    return priceList;
+    let response = await searchValuesModel.findById(searchValue).exec();
+    return response;
   } catch (err) {
-    logFileFunc(err.stack);
-    notifyMain({
-      title: 'Query single price failed',
-      body: `Problem querying ${customerNumber} price list, please check the log file.`,
-    });
+    console.error(err);
   }
 };
 
-// GET CUSTOMER NAME
-exports.queryCustomerName = async function (customerNumber, allNames, notifyMain) {
-  let result;
-  if (allNames) {
-    try {
-      result = await customerNumberNameModel.find().lean().exec();
-      return result;
-    } catch (err) {
-      logFileFunc(err.stack);
-      notifyMain({
-        title: 'Querying all customer names failed',
-        body: `Problem querying all customer names, please check the log file.`,
-      });
-    }
-  } else {
-    try {
-      result = await customerNumberNameModel.findById(customerNumber).lean().exec();
-      return result;
-    } catch (err) {
-      logFileFunc(err.stack);
-      notifyMain({
-        title: 'Querying a customer name failed',
-        body: `Problem querying name for ${customerNumber}, please check the log file.`,
-      });
-    }
-  }
-};
-
-/* QUERY SINGLE PRICE-LIST NUMBER */
-exports.querySinglePriceListNumber = async function (customerNumber, notifyMain) {
+exports.createNewSearchTerm = async function (searchTerm, resultsData) {
   try {
-    let result = await customerPricelistNumberModel.findById(customerNumber).lean().exec();
-    if (result !== null) {
-      return result.number;
+    let response = await resultsModel.create({ data: resultsData });
+    if (response !== null) searchValuesModel.create({ _id: searchTerm, search: response._id });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+exports.querySearchTerm = async function (searchTerm) {
+  try {
+    let resultA = await searchValuesModel.findById(searchTerm).lean().exec();
+    if (resultA !== null) {
+      let resultB = await resultsModel.findById(resultA.search).lean().exec();
+      if (resultB !== null) return resultB;
     } else {
-      return null;
+      return { data: 'error' };
     }
   } catch (err) {
-    logFileFunc(err.stack);
-    notifyMain({
-      title: 'Querying price list number failed',
-      body: `Problem querying ${customerNumber} price list, please check the log file.`,
+    console.error(err);
+  }
+};
+
+exports.deleteSearch = async function (searchTerm) {
+  try {
+    let response = await searchValuesModel.findByIdAndRemove(searchTerm).exec();
+    if (response !== null) {
+      resultsModel.findByIdAndDelete(response.search).exec();
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+exports.updateSearch = async function (searchTerm, responseData) {
+  try {
+    let resultA = await searchValuesModel.findById(searchTerm).lean().exec();
+    if (resultA !== null) {
+      resultsModel.findByIdAndUpdate(resultA.search, responseData).lean().exec();
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+exports.updateDate = async function () {
+  let date = new Date(),
+    asDate = new Date(date.getFullYear(), date.getMonth(), date.getDay());
+  try {
+    let res = await updateDateModel.findByIdAndUpdate('date', {
+      date: asDate,
     });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+exports.getDate = async function () {
+  try {
+    let response = await updateDateModel.findById('date').lean().exec();
+    return response;
+  } catch (err) {
+    console.error(err);
   }
 };

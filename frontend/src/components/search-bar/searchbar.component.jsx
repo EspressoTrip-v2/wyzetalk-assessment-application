@@ -1,15 +1,13 @@
-// React components
 import { Button, createTheme, ThemeProvider, Tooltip } from '@material-ui/core';
 import { createRef, useState } from 'react';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
-// Style Components
 import './style.css';
 
 function notifyLength() {
   NotificationManager.error(
     'Search entries need to be longer than 2 characters...',
-    'Too Short'
+    'TOO SHORT'
   );
 }
 
@@ -22,6 +20,14 @@ const buttonTheme = createTheme({
     },
   },
 });
+
+// Save the adjustments to the local stored searches
+const setLocal = (value) => {
+  let arr = JSON.parse(localStorage.getItem('searched'));
+  if (arr.indexOf(value) > -1) return;
+  arr.push(value);
+  localStorage.setItem('searched', JSON.stringify(arr));
+};
 
 const SearchBar = (props) => {
   const [searchVal, setSearchVal] = useState('');
@@ -43,6 +49,7 @@ const SearchBar = (props) => {
                   props.history.push('/grid');
                   e.target.value = null;
                   props.requestArtistInfo(searchVal, props.history);
+                  setLocal(searchVal);
                 } else {
                   notifyLength();
                   if (props.location.pathname === '/grid') {
@@ -61,6 +68,7 @@ const SearchBar = (props) => {
                 props.requestReset('');
                 props.requestArtistInfo(inputVal.current.value, props.history);
                 props.history.push('/grid');
+                setLocal(inputVal.current.value);
                 inputVal.current.value = null;
               } else {
                 notifyLength();

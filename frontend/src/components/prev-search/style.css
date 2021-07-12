@@ -1,0 +1,26 @@
+.searched-container {
+  position: relative;
+  flex-direction: column;
+  justify-content: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1vh 0;
+  width: 100%;
+  min-height: 16vh;
+}
+.searched-border {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-content: center;
+}
+.searched-label {
+  font-size: 1vw;
+  opacity: 0.5;
+  padding: 0.3vh;
+}
+
+.chip-container {
+  padding: 1vh 0vw;
+  margin: 0 0.1vw;
+}

@@ -1,5 +1,3 @@
-// React components
-
 import HeaderLogo from '../logo/logo.component';
 import SearchBar from '../search-bar/searchbar.component';
 import './style.css';

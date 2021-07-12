@@ -1,0 +1,25 @@
+.server-logo-container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+  left: 1vw;
+  bottom: 2vh;
+  width: 3vw;
+  height: 3vw;
+  border-radius: 200%;
+  background-color: #fff;
+  animation: flash 1s ease-in-out infinite alternate;
+}
+
+@keyframes flash {
+  0% {
+    box-shadow: 0 0 0px #fff;
+  }
+  100% {
+    box-shadow: 0 0 20px #e81c457e;
+  }
+}

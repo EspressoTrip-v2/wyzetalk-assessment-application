@@ -1,27 +1,29 @@
 import { useEffect, useState } from 'react';
+import uniqid from 'uniqid';
 import CardPopUp from '../../components/card-popup/cardPopup.component';
 import Card from '../../components/card/card.component';
 import Header from '../../components/header/header.component.style';
 import Loader from '../../components/loader/loader.component';
+import ServerLogo from '../../components/server-logo/serverLogo.component';
 import './style.css';
 
-function Grid({ requestArtist, setLoaderVal, ...props }) {
+function Grid(props) {
   const [popUp, setPopUp] = useState(false);
   const [staticArtist, setStaticArtist] = useState({});
 
   useEffect(() => {
     setTimeout(() => {
-      setLoaderVal(false);
+      props.setLoaderVal(false);
     }, 500);
   });
   return (
     <div className="grid">
-      {requestArtist.data.map((el) => {
+      {props.requestArtist.data.map((el) => {
         return (
           <Card
             setStaticArtist={setStaticArtist}
             setPopUp={setPopUp}
-            key={el.id}
+            key={uniqid.process()}
             artist={el}
           />
         );
@@ -45,6 +47,7 @@ const GridPage = (props) => {
         </div>
       )}
       {!props.loadingData && <Grid setLoaderVal={setLoaderVal} {...props} />}
+      <ServerLogo {...props} />
     </div>
   );
 };

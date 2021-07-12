@@ -2,16 +2,17 @@ import { Button, Tooltip } from '@material-ui/core';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import ReactAudioPlayer from 'react-audio-player';
+import uniqid from 'uniqid';
 import Loader from '../loader/loader.component';
 import logo from './none.png';
 import './style.css';
 
 const AlbumsList = ({ albums }) => {
   return (
-    <div className="album-list-container">
+    <div key={uniqid.process()} className="album-list-container">
       {albums.data.map((el, idx) => {
         return (
-          <div className="album-element" key={idx}>
+          <div className="album-element" key={uniqid.process()}>
             {el.title}
           </div>
         );
@@ -25,14 +26,14 @@ const SongsList = ({ songs }) => {
     <div className="songs-list-container">
       {songs.data.map((el, idx) => {
         return (
-          <div>
-            <Tooltip title={'Album name: ' + el.album.title} arrow>
-              <div className="songs-element" key={idx}>
+          <div key={uniqid.process()}>
+            <Tooltip key={uniqid.process()} title={'Album name: ' + el.album.title} arrow>
+              <div className="songs-element" key={uniqid.process()}>
                 {el.title}
               </div>
             </Tooltip>
             <ReactAudioPlayer
-              key={'r' + idx}
+              key={uniqid.process()}
               style={{
                 height: '3.5vh',
                 width: '23vw',
@@ -57,11 +58,11 @@ const CardPopUp = ({ popUp, setPopUp, artist, ...props }) => {
 
   // Album requests to BFF API
   const requestAlbums = async () => {
-    let result = await axios.get('/api/server/albums/' + artist.id);
-    if (result.data === 'error' || result.data.total === 0) {
+    let response = await axios.get('/api/server/albums/' + artist.id);
+    if (response.data === 'error' || response.data.total === 0) {
       setAlbums({ error: 0 });
     } else {
-      setAlbums(result.data);
+      setAlbums(response.data);
     }
     setTimeout(() => {
       setLoaderAlbums(false);
@@ -70,11 +71,11 @@ const CardPopUp = ({ popUp, setPopUp, artist, ...props }) => {
 
   // Album requests to BFF API
   const requestSongs = async () => {
-    let result = await axios.get('/api/server/top/' + artist.id);
-    if (result.data === 'error' || result.data.total === 0) {
+    let response = await axios.get('/api/server/top/' + artist.id);
+    if (response.data === 'error' || response.data.total === 0) {
       setSongs({ error: 0 });
     } else {
-      setSongs(result.data);
+      setSongs(response.data);
     }
     setTimeout(() => {
       setLoaderSongs(false);
@@ -83,7 +84,6 @@ const CardPopUp = ({ popUp, setPopUp, artist, ...props }) => {
   useEffect(() => {
     requestAlbums();
     requestSongs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return popUp ? (

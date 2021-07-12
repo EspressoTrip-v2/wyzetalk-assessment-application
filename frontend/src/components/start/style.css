@@ -2,8 +2,10 @@
   position: relative;
   display: flex;
   width: 27vw;
+  height: 100vh;
   flex-direction: column;
   justify-content: center;
+  justify-items: center;
   height: fit-content;
   align-items: center;
   align-content: center;
