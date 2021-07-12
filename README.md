@@ -9,7 +9,7 @@ tested on Chrome and Mozilla (The UI isn't good on this) be aware I have not
 allowed for cross browser support because of time.
 
 ```bash
-In the root directory run "npm run dev".
+In the root directory run: npm run dev.
 ```
 
 ## Notes
