@@ -22,8 +22,6 @@ $ cd frontend/
 
 $ npm i (frontend directory)
 
-$ npm run dev (int h)
-
 $ cd ..
 
 $ npm run dev
