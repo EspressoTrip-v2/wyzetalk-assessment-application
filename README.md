@@ -8,13 +8,30 @@ have been included in the Express code. It was built for Edge and has been
 tested on Chrome and Mozilla (The UI isn't good on this) be aware I have not
 allowed for cross browser support because of time.
 
+#### Installing dependencies
+
 ```bash
-Root director run -> npm run dev <-
+## There are two sections that require installs
+## root directory and the frontend directory
+## open terminal in the root and run the below
+## commands
+
+$ npm i (root directory)
+
+$ cd frontend/
+
+$ npm i (frontend directory)
+
+$ npm run dev (int h)
+
+$ cd ..
+
+$ npm run dev
 ```
 
 ## Notes
 
-Request: I used axios
+Requests: I used axios library
 
 Redux: I decided to use Hooks instead of Redux as for such a tiny little
 thing, Redux is just too verbose.
