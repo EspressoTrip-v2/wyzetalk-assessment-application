@@ -1,0 +1,25 @@
+.error-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+.btn-error {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  height: 20vh;
+  width: 100vw;
+  bottom: 5vh;
+}
+
+.error-img {
+  width: 45vw;
+  height: auto;
+}

@@ -1,4 +1,4 @@
-import { Button, createTheme, ThemeProvider, Tooltip } from '@material-ui/core';
+import { Button, Tooltip } from '@material-ui/core';
 import { createRef, useState } from 'react';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
@@ -10,16 +10,6 @@ function notifyLength() {
     'TOO SHORT'
   );
 }
-
-const buttonTheme = createTheme({
-  overrides: {
-    MuiButton: {
-      root: {
-        minWidth: '4vw',
-      },
-    },
-  },
-});
 
 // Save the adjustments to the local stored searches
 const setLocal = (value) => {
@@ -60,38 +50,36 @@ const SearchBar = (props) => {
             }}
           />
         </Tooltip>
-        <ThemeProvider theme={buttonTheme}>
-          <Button
-            onClick={(e) => {
-              if (!props.loadingInfo) props.loadingReset(true);
-              if (inputVal.current.value.length >= 3) {
-                props.requestReset('');
-                props.requestArtistInfo(inputVal.current.value, props.history);
-                props.history.push('/grid');
-                setLocal(inputVal.current.value);
-                inputVal.current.value = null;
-              } else {
-                notifyLength();
-                if (props.location.pathname === '/grid') {
-                  props.history.push('/');
-                }
+        <Button
+          onClick={(e) => {
+            if (!props.loadingInfo) props.loadingReset(true);
+            if (inputVal.current.value.length >= 3) {
+              props.requestReset('');
+              props.requestArtistInfo(inputVal.current.value, props.history);
+              props.history.push('/grid');
+              setLocal(inputVal.current.value);
+              inputVal.current.value = null;
+            } else {
+              notifyLength();
+              if (props.location.pathname === '/grid') {
+                props.history.push('/');
               }
-            }}
-            style={{
-              backgroundColor: '#E81C46',
-              color: '#fff',
-              fontSize: '1vw',
-              height: '2vw',
-              width: '4vw',
-              maxWidth: '4vw',
-              position: 'relative',
-              borderRadius: '1vw',
-            }}
-            variant="contained"
-          >
-            FIND
-          </Button>
-        </ThemeProvider>
+            }
+          }}
+          style={{
+            backgroundColor: '#E81C46',
+            color: '#fff',
+            fontSize: '1vw',
+            height: '2vw',
+            width: '4vw',
+            maxWidth: '4vw',
+            position: 'relative',
+            borderRadius: '1vw',
+          }}
+          variant="contained"
+        >
+          FIND
+        </Button>
       </div>
       <NotificationContainer />
     </div>

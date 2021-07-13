@@ -6,6 +6,7 @@ import { Route, Switch } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import uniqid from 'uniqid';
 import './App.css';
+import Error from './components/error/error.component';
 import GridPage from './pages/grid-page/grid.component';
 import HomePage from './pages/home-page/home.component';
 
@@ -113,6 +114,7 @@ function App() {
                     />
                   )}
                 />
+                <Route path="*" render={() => <Error {...props} />} />
               </Switch>
             </CSSTransition>
           </TransitionGroup>
