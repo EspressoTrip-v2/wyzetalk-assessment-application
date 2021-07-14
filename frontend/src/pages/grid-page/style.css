@@ -30,7 +30,7 @@
 }
 .grid {
   position: relative;
-  height: 100vh;
+  height: fit-content;
   width: auto;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
